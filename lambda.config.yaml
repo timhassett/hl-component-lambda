@@ -1,0 +1,34 @@
+component_version: 1.0.0
+maximum_availability_zones: 5
+
+# Demo Config
+
+# distribution:
+#   bucket: source.example.dev
+#   key: /lambda
+#
+# functions:
+#   myfunction:
+#       handler: handler.lambda_handler
+#       runtime: python3.6
+#       code_uri: myfunction/${MyFunctionVersion}/src.zip
+#       timeout: 30
+#       environment:
+#         Environment:
+#           Ref: Environment
+#       policies:
+#         logs:
+#           Action:
+#             - logs:PutLogEvents
+#             - logs:DescribeLogStreams
+#             - logs:DescribeLogGroups
+#           Resource:
+#             - '*'
+#       enable_eni: true
+#       events:
+#         cron:
+#           type: schedule
+#           expression: cron(0 12 * * ? *)
+#           payload: "{ 'a': 1, 'b': 2 }"
+#         trigger:
+#           type: sns

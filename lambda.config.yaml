@@ -25,6 +25,7 @@ maximum_availability_zones: 5
 #           Resource:
 #             - '*'
 #       enable_eni: true
+#       log_retention: 7
 #       events:
 #         cron:
 #           type: schedule
@@ -32,3 +33,7 @@ maximum_availability_zones: 5
 #           payload: "{ 'a': 1, 'b': 2 }"
 #         trigger:
 #           type: sns
+#         filter:
+#           type: filter
+#           pattern: '[date, deployment_id, bytes]'
+#           log_group: myloggroup

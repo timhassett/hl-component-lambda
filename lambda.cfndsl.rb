@@ -71,10 +71,16 @@ CloudFormation do
       Tags tags
     end
 
+    Logs_LogGroup("#{function_name}LogGroup") do
+      LogGroupName FnSub("/aws/lambda/${function_name}")
+      RetentionInDays lambda_config['log_retention'] if lambda_config.has_key? 'log_retention'
+    end
+
     lambda_config['events'].each do |name,event|
 
       case event['type']
       when 'schedule'
+
         Events_Rule("#{function_name}Schedule#{name}") do
           ScheduleExpression event['expression']
           State event['disable'] ? 'DISABLED' : 'ENABLED'
@@ -86,7 +92,7 @@ CloudFormation do
           Targets([target])
         end
 
-        Lambda_Permission("#{function_name}Permissions") do
+        Lambda_Permission("#{function_name}#{name}Permissions") do
           FunctionName Ref(function_name)
           Action 'lambda:InvokeFunction'
           Principal 'events.amazonaws.com'
@@ -94,6 +100,7 @@ CloudFormation do
         end
 
       when 'sns'
+
         SNS_Topic("#{function_name}Sns#{name}") do
           Subscription([
             {
@@ -103,12 +110,29 @@ CloudFormation do
           ])
         end
 
-        Lambda_Permission("#{function_name}Permissions") do
+        Lambda_Permission("#{function_name}#{name}Permissions") do
           FunctionName Ref(function_name)
           Action 'lambda:InvokeFunction'
           Principal 'sns.amazonaws.com'
           SourceArn Ref("#{function_name}Sns#{name}")
         end
+
+      when 'filter'
+
+        Logs_SubscriptionFilter("#{function_name}SubscriptionFilter#{name}") do
+          DestinationArn FnGetAtt(function_name, 'Arn')
+          FilterPattern event['pattern']
+          LogGroupName Ref(event['log_group'])
+        end
+
+        Lambda_Permission("#{function_name}#{name}Permissions") do
+          FunctionName Ref(function_name)
+          Action 'lambda:InvokeFunction'
+          Principal FnSub('logs.${AWS::Region}.amazonaws.com')
+          SourceAccount Ref('AWS::AccountId')
+          SourceArn FnSub("arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/#{event['log_group']}:*")
+        end
+
       end
 
     end if lambda_config.has_key?('events')

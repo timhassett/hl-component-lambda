@@ -72,7 +72,7 @@ CloudFormation do
     end
 
     Logs_LogGroup("#{function_name}LogGroup") do
-      LogGroupName FnSub("/aws/lambda/${function_name}")
+      LogGroupName FnSub("/aws/lambda/#{function_name}")
       RetentionInDays lambda_config['log_retention'] if lambda_config.has_key? 'log_retention'
     end
 

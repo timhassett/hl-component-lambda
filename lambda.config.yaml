@@ -37,3 +37,29 @@ maximum_availability_zones: 5
 #           type: filter
 #           pattern: '[date, deployment_id, bytes]'
 #           log_group: myloggroup
+
+
+distribution:
+  bucket: source.example.dev
+  prefix: lambda
+
+functions:
+  myfunction:
+      handler: handler.lambda_handler
+      runtime: python3.6
+      code_uri: myfunction/src.zip
+      timeout: 30
+      policies:
+        logs:
+          action:
+            - logs:PutLogEvents
+            - logs:DescribeLogStreams
+            - logs:DescribeLogGroups
+          resource:
+            - '*'
+      enable_eni: false
+      log_retention: 7
+      events:
+        trigger:
+          type: s3
+          bucket: mybucket

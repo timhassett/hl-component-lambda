@@ -137,6 +137,15 @@ CloudFormation do
           SourceArn FnSub("arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/#{event['log_group']}:*")
         end
 
+      when 's3'
+
+        Lambda_Permission("#{function_name}#{name}Permissions") do
+            FunctionName Ref(function_name)
+            Action 'lambda:InvokeFunction'
+            Principal 's3.amazonaws.com'
+            SourceArn event['bucket']
+          end
+
       end
 
     end if lambda_config.has_key?('events')

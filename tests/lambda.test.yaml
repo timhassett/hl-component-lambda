@@ -1,0 +1,32 @@
+test_metadata:
+  type: config
+  name: basic lambda function
+  description: Create basic lambda function
+
+
+
+component_version: 1.0.0
+maximum_availability_zones: 5
+
+# Demo Config
+
+distribution:
+  bucket: source.example.dev
+  prefix: lambda
+
+functions:
+  myfunction:
+      handler: handler.lambda_handler
+      runtime: python3.6
+      code_uri: myfunction/src.zip
+      timeout: 30
+      policies:
+        logs:
+          action:
+            - logs:PutLogEvents
+            - logs:DescribeLogStreams
+            - logs:DescribeLogGroups
+          resource:
+            - '*'
+      enable_eni: false
+      log_retention: 7

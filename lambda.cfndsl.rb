@@ -71,6 +71,10 @@ CloudFormation do
       Tags tags
     end
 
+    Output("#{function_name}Arn") {
+        Value(Ref(function_name))
+      }
+
     Logs_LogGroup("#{function_name}LogGroup") do
       LogGroupName FnSub("/aws/lambda/#{function_name}")
       RetentionInDays lambda_config['log_retention'] if lambda_config.has_key? 'log_retention'

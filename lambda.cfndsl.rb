@@ -72,7 +72,7 @@ CloudFormation do
     end
 
     Output("#{function_name}Arn") {
-        Value(Ref(FnGetAtt(function_name, 'Arn')))
+        Value(FnGetAtt(function_name, 'Arn'))
       }
 
     Logs_LogGroup("#{function_name}LogGroup") do

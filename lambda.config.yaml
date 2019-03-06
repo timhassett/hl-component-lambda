@@ -5,7 +5,7 @@ maximum_availability_zones: 5
 
 # distribution:
 #   bucket: source.example.dev
-#   key: /lambda
+#   prefix: lambda
 #
 # functions:
 #   myfunction:
@@ -18,11 +18,11 @@ maximum_availability_zones: 5
 #           Ref: Environment
 #       policies:
 #         logs:
-#           Action:
+#           action:
 #             - logs:PutLogEvents
 #             - logs:DescribeLogStreams
 #             - logs:DescribeLogGroups
-#           Resource:
+#           resource:
 #             - '*'
 #       enable_eni: true
 #       log_retention: 7

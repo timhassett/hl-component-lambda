@@ -68,6 +68,9 @@ CloudFormation do
       if !lambda_config['named'].nil? && lambda_config['named']
         FunctionName(function_name)
       end
+      if !lambda_config['dlq_target_arn'].nil? && lambda_config['dlq_target_arn']
+        DeadLetterConfig({'TargetArn' => lambda_config['dlq_target_arn']})
+      end
       Tags tags
     end
 

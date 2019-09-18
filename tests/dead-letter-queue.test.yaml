@@ -1,0 +1,33 @@
+test_metadata:
+  type: config
+  name: dead_letter_queue
+  description: Lambda with DLQ
+
+
+
+component_version: 1.0.0
+maximum_availability_zones: 5
+
+# Demo Config
+
+distribution:
+  bucket: source.example.dev
+  prefix: lambda
+
+functions:
+  myfunction:
+      handler: handler.lambda_handler
+      runtime: python3.6
+      code_uri: myfunction/src.zip
+      timeout: 30
+      policies:
+        logs:
+          action:
+            - logs:PutLogEvents
+            - logs:DescribeLogStreams
+            - logs:DescribeLogGroups
+          resource:
+            - '*'
+      enable_eni: false
+      log_retention: 7
+      dlq_target_arn: arn:aws:sqs:ap-southeast-2:000000000000:DeadLetterQueue

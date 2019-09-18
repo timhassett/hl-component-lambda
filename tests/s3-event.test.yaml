@@ -1,7 +1,7 @@
 test_metadata:
   type: config
-  name: basic lambda function
-  description: Create basic lambda function
+  name: s3_trigger
+  description: Create basic lambda function with s3 trigger
 
 
 
